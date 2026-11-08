@@ -1,3 +1,7 @@
+from asyncpg import PostgresError
+from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import TimeoutError as SQLAlchemyTimeoutError
+
 from app.app_config import config
 from app.clients.postgres_client import PostgresClient
 
@@ -10,7 +14,7 @@ class HomeService:
         try:
             await self.postgres_client.ping()
             database = "ok"
-        except Exception:
+        except (DBAPIError, PostgresError, OSError, SQLAlchemyTimeoutError):
             database = "unavailable"
 
         return {

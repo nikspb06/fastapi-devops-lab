@@ -53,7 +53,10 @@ jobs:
       - name: Apply migrations
         run: poetry run alembic upgrade head
 
-      # Keep smoke tests here until the project has a separate test suite.
+      - name: Run unit tests
+        run: poetry run python -m unittest discover -s tests -v
+
+      # Exercise the API with a real PostgreSQL connection as well.
       - name: Test API and database connection
         run: |
           poetry run python - <<'PY'
